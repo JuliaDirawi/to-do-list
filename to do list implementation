@@ -1,0 +1,65 @@
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class ToDoListGUI extends JFrame implements ActionListener {
+
+    private DefaultListModel<String> taskListModel;
+    private JList<String> list;
+    private JTextField taskTextField;
+    private JButton addButton, removeButton;
+
+    public ToDoListGUI() {
+
+        taskListModel = new DefaultListModel<>();
+        list = new JList<>(taskListModel);
+        taskTextField = new JTextField(8);
+        addButton = new JButton("Add Task");
+        removeButton = new JButton("Remove Task");
+
+        // Set up the GUI layout
+        JPanel panel = new JPanel(new BorderLayout());
+
+        JPanel inputPanel = new JPanel(new FlowLayout());
+        inputPanel.add(taskTextField);
+        panel.add(inputPanel, BorderLayout.NORTH);
+
+        panel.add(new JScrollPane(list), BorderLayout.CENTER);
+
+        JPanel button = new JPanel(new FlowLayout());
+        button.add(addButton);
+        button.add(removeButton);
+        panel.add(button, BorderLayout.SOUTH);
+        // Add action listeners to the buttons
+        addButton.addActionListener(this);
+        removeButton.addActionListener(this);
+
+        // Set the window properties
+        setTitle("To-Do List");
+        setContentPane(panel);
+        pack();
+        setVisible(true);
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == addButton) {
+            String task = taskTextField.getText().trim();
+            if (!task.isEmpty()) {
+                taskListModel.addElement(task);
+            }
+        } else if (e.getSource() == removeButton) {
+            int selectedIndex = list.getSelectedIndex();
+            if (selectedIndex != -1) {
+                taskListModel.remove(selectedIndex);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        new ToDoListGUI();
+    }
+}
